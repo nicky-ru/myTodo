@@ -1,245 +1,206 @@
 // Import react components
-import { useState, useEffect } from 'react';
-
-// Import App Component & helper
-import WorkshopForm from './components/Form';
-import generateWebPage from './helpers/generateWebPage';
+import React, { useState, useEffect } from 'react';
 
 // Import UI Components
-import { Header, Tab, Container } from 'semantic-ui-react';
+import { Tab, Container, Divider } from 'semantic-ui-react';
 
-/************************************************/
-/*        Step 4.2 Code goes here               */
-/************************************************/
+import HeaderComponent from './components/Header';
+import TodoComponent from './components/Todo';
 
+import { SkynetClient } from 'skynet-js';
 
-/*****/
-
-/************************************************/
-/*        Step 1.2 Code goes here               */
-/************************************************/
-
-
-/*****/
-
-/************************************************/
-/*        Step 4.3 Code goes here               */
-/************************************************/
-
-
-/*****/
+// const portal =
+//   window.location.hostname === 'localhost' ? 'https://siasky.net' : undefined;
+// const client = new SkynetClient(portal);
+const client = new SkynetClient();
 
 function App() {
   // Define app state helpers
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
-  // Step 1 Helpers
-  const [file, setFile] = useState();
-  const [fileSkylink, setFileSkylink] = useState('');
+  // list helpers
+  const [todoItems, setTodoItems] = useState([]);
+  const [item, setItem] = useState('');
 
-  // Step 2 Helpers
-  const [name, setName] = useState('');
-  const [webPageSkylink, setWebPageSkylink] = useState('');
-  const [webPageSkylinkUrl, setWebPageSkylinkUrl] = useState('');
-
-  // Step 3 Helpers
-  const [dataKey, setDataKey] = useState('');
-  const [userColor, setUserColor] = useState('#000000');
+  // MySky Helpers
+  const [dirNames, setDirNames] = useState(['today', 'important', 'groceries', 'reading_list']);
   const [filePath, setFilePath] = useState();
-  const [userID, setUserID] = useState();
+  const [userID, setUserID] = useState('');
   const [mySky, setMySky] = useState();
   const [loggedIn, setLoggedIn] = useState(null);
 
-  // When dataKey changes, update FilePath state.
+  // When list folder changes, update FilePath state.
   useEffect(() => {
-    setFilePath(dataDomain + '/' + dataKey);
-  }, [dataKey]);
+    setFilePath(dataDomain + '/' + dirNames[activeTab]);
+  }, [activeTab]);
 
-  /************************************************/
-  /*        Step 3.1 Code goes here               */
-  /************************************************/
+  // Load items for a new filePath
+  useEffect(() => {
+    loadData();
+  }, [filePath]);
 
   // choose a data domain for saving files in MySky
-  const dataDomain = '';
-
-  /*****/
+  const dataDomain = 'mytodo';
 
   // On initial run, start initialization of MySky
   useEffect(() => {
-    /************************************************/
-    /*        Step 3.2 Code goes here               */
-    /************************************************/
+    async function initMySky() {
+      try {
+        const mySky = await client.loadMySky(dataDomain);
 
+        const loggedIn = await mySky.checkLogin();
 
-    /*****/
+        setMySky(mySky);
+        setLoggedIn(loggedIn);
+
+        if (loggedIn) {
+          setUserID(await mySky.userID());
+        }
+      } catch (e) {
+        console.log('error while init', e);
+      }
+    }
+    // call async setup function
+    initMySky();
   }, []);
 
-  // Handle form submission. This is where the bulk of the workshop logic is
-  // handled
-  const handleSubmit = async (event) => {
+  const handleAddItem = async (event) => {
     event.preventDefault();
-    console.log('form submitted');
-    setLoading(true);
+    document.getElementById('item-add-form').reset();
+    console.log(`item to add: ${item}`);
 
-    /************************************************/
-    /*        Part 1: Upload a file                */
-    /************************************************/
-    // console.log('Uploading file...');
+    // new items will be temporary saved in the todoItems state
+    // to save the new items to MySky see handleMySkyWrite()
+    const items = [...todoItems];
+    items.push(item);
+    setTodoItems(items);
+  }
 
-    /************************************************/
-    /*        Step 1.3 Code goes here               */
-    /************************************************/
+  const handleDeleteItem = async (i) => {
+    console.log(`item to delete: ${todoItems[i]}`);
 
-
-    /************************************************/
-    /*        Part 2: Upload a Web Page             */
-    /************************************************/
-    // console.log('Uploading web page...');
-
-    /************************************************/
-    /*        Step 2.1 Code goes here               */
-    /************************************************/
-
-
-    /************************************************/
-    /*        Part 3: MySky                         */
-    /************************************************/
-    // console.log('Saving user data to MySky file...');
-
-    /************************************************/
-    /*        Step 3.6 Code goes here              */
-    /************************************************/
-
-
-    /*****/
-
-    setLoading(false);
-  };
+    // the item will be removed from the todoItems list in the current state
+    // but to remove the item from MySky the user should save changes
+    const items = [...todoItems];
+    items.splice(i, 1);
+    setTodoItems(items);
+  }
 
   const handleMySkyLogin = async () => {
-    /************************************************/
-    /*        Step 3.3 Code goes here               */
-    /************************************************/
+    const status = await mySky.requestLoginAccess();
 
+    setLoggedIn(status);
 
-    /*****/
+    if (status) {
+      setUserID(await mySky.userID());
+    }
   };
 
   const handleMySkyLogout = async () => {
-    /************************************************/
-    /*        Step 3.4 Code goes here              */
-    /************************************************/
+    await mySky.logout();
 
+    setLoggedIn(false);
+    setUserID('');
+  }
 
-    /*****/
-  };
+  const handleMySkyWrite = async () => {
+    setSaving(true);
 
-  const handleMySkyWrite = async (jsonData) => {
-    /************************************************/
-    /*        Step 3.7 Code goes here              */
-    /************************************************/
+    const jsonData = {
+      todoItems,
+    }
 
+    try {
+      console.log('userID: ', userID);
+      console.log('filePath: ', filePath);
 
-    /*****/
-    /************************************************/
-    /*        Step 4.7 Code goes here              */
-    /************************************************/
+      await mySky.setJSON(filePath, jsonData);
 
+      console.log('item has been written to SkyDB');
+    } catch (e) {
+      console.log('error while setJSON: ', e.message);
+    }
 
-    /*****/
-  };
+    setSaving(false);
+  }
 
-  // loadData will load the users data from SkyDB
-  const loadData = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    console.log('Loading user data from SkyDB');
-
-    /************************************************/
-    /*        Step 4.5 Code goes here              */
-    /************************************************/
-
-
-    /*****/
-
-    setLoading(false);
-  };
-
-  const handleSaveAndRecord = async (event) => {
-    event.preventDefault();
+  // load list of items from MySky for current folder
+  const loadData = async () => {
     setLoading(true);
 
-    /************************************************/
-    /*        Step 4.6 Code goes here              */
-    /************************************************/
+    console.log('loading user data from SkyDB');
 
+    try {
+      const { data } = await mySky.getJSON(filePath);
 
-    /*****/
+      if (data) {
+        setTodoItems(data.todoItems);
+        console.log('User data loaded from SkyDB!');
+      } else {
+        console.error('There was a problem with get json');
+      }
+
+    } catch (e) {
+      console.log('error while getting JSON');
+    }
 
     setLoading(false);
-  };
+  }
 
-  // define args passed to form
-  const formProps = {
-    mySky,
-    handleSubmit,
-    handleMySkyLogin,
-    handleMySkyLogout,
-    handleSaveAndRecord,
-    loadData,
-    name,
-    dataKey,
-    userColor,
-    activeTab,
-    fileSkylink,
-    webPageSkylinkUrl,
-    loading,
-    loggedIn,
-    dataDomain,
-    userID,
-    setLoggedIn,
-    setDataKey,
-    setFile,
-    setName,
-    setUserColor,
-  };
-
-  // handleSelectTab handles selecting the part of the workshop
+  // handleSelectTab handles selecting the folder of the mytodo app
   const handleSelectTab = (e, { activeIndex }) => {
     setActiveTab(activeIndex);
+
+    // clear the todoItems state when change to another folder
+    setTodoItems([]);
+  };
+
+  // define args passed to the TodoComponent
+  const formProps = {
+    todoItems,
+    handleAddItem,
+    handleDeleteItem,
+    setItem,
+    loadData,
+    handleMySkyWrite,
+    loggedIn,
+    loading,
+    saving,
+    filePath,
   };
 
   const panes = [
     {
-      menuItem: 'Part 1: File Upload',
+      menuItem: 'Today',
       render: () => (
         <Tab.Pane>
-          <WorkshopForm {...formProps} />
+          <TodoComponent {...formProps}/>
         </Tab.Pane>
       ),
     },
     {
-      menuItem: 'Part 2: Folder Upload',
+      menuItem: 'Important',
       render: () => (
         <Tab.Pane>
-          <WorkshopForm {...formProps} />
+          <TodoComponent {...formProps}/>
         </Tab.Pane>
       ),
     },
     {
-      menuItem: 'Part 3: MySky',
+      menuItem: 'Groceries',
       render: () => (
         <Tab.Pane>
-          <WorkshopForm {...formProps} />
+          <TodoComponent {...formProps}/>
         </Tab.Pane>
       ),
     },
     {
-      menuItem: 'Part 4: Content Record DAC',
+      menuItem: 'Reading List',
       render: () => (
         <Tab.Pane>
-          <WorkshopForm {...formProps} />
+          <TodoComponent {...formProps}/>
         </Tab.Pane>
       ),
     },
@@ -247,12 +208,13 @@ function App() {
 
   return (
     <Container>
-      <Header
-        as="h1"
-        content="Skynet Workshop App"
-        textAlign="center"
-        style={{ marginTop: '1em', marginBottom: '1em' }}
-      />
+      <HeaderComponent
+        loggedIn={loggedIn}
+        handleMySkyLogout={handleMySkyLogout}
+        handleMySkyLogin={handleMySkyLogin}
+        userID={userID}
+        />
+      <Divider/>
       <Tab
         menu={{ fluid: true, vertical: true, tabular: true }}
         panes={panes}
