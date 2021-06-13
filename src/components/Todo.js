@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   List,
   Form,
@@ -6,36 +6,14 @@ import {
   Button,
   Divider,
   Popup,
-  Icon,
   Header,
   Dimmer,
   Loader,
 } from 'semantic-ui-react'
 
+import Items from './Items';
+
 const TodoComponent = (props) => {
-  const [todoItems, setTodoItems] = useState([]);
-
-  // refresh content of the list in the current folder
-  // after adding or removing an item
-  useEffect(() => {
-    let items = [];
-
-    props.todoItems.forEach((item, i) => {
-      items.push(
-        <List.Item key={i} style={{textTransform: 'capitalize'}}>
-          <Icon
-            link
-            name={'check'}
-            onClick={() => {props.handleDeleteItem(i);}}
-          />
-          {item}
-        </List.Item>
-      );
-    });
-
-    setTodoItems(items);
-  }, [props.todoItems]);
-
   return (
     <>
       <Popup
@@ -54,7 +32,10 @@ const TodoComponent = (props) => {
 
       {props.loggedIn === true && (
         <List>
-          {todoItems}
+          <Items
+            todoItems={props.todoItems}
+            handleDeleteItem={props.handleDeleteItem}
+          />
         </List>
       )}
 
