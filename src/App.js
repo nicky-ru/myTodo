@@ -23,7 +23,7 @@ function App() {
   // list helpers
   const [todoItems, setTodoItems] = useState([]);
   const [item, setItem] = useState('');
-  const [taskMessage, setTaskMessage] = useState('');
+  const [listNotEmpty, setListNotEmpty] = useState(false);
 
   // MySky Helpers
   const [dirNames, setDirNames] = useState(['today', 'important', 'groceries', 'reading_list']);
@@ -43,6 +43,11 @@ function App() {
     setTodoItems([]);
     loadData();
   }, [filePath]);
+
+  // handle empty lists
+  useEffect(() => {
+    setListNotEmpty(todoItems.length > 0);
+  }, [todoItems]);
 
   // choose a data domain for saving files in MySky
   const dataDomain = 'mytodo';
@@ -137,14 +142,12 @@ function App() {
 
     try {
       const { data } = await mySky.getJSON(filePath);
-      setTaskMessage('The list is empty');
 
       if (data) {
 
         if (data.todoItems.length > 0) {
           setTodoItems(data.todoItems);
           console.log('User data loaded from SkyDB!');
-          setTaskMessage('');
 
         } else console.log('The retrieved data is empty');
 
@@ -175,7 +178,7 @@ function App() {
     loading,
     saving,
     filePath,
-    taskMessage,
+    listNotEmpty,
   };
 
   const panes = [

@@ -65,7 +65,10 @@ const TodoComponent = (props) => {
         </List>
       )}
 
-      <i>{props.taskMessage}</i>
+      {props.listNotEmpty === false && (
+        <i>The list is empty</i>
+      )}
+
 
       <Divider />
       <Form onSubmit={props.handleAddItem} id='item-add-form'>
