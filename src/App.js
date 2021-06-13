@@ -139,9 +139,9 @@ function App() {
 
       if (data) {
         setTodoItems(data.todoItems);
-        console.log('User data loaded from SkyDB!');
+        console.log('User data loaded from SkyDB!', data);
       } else {
-        console.error('There was a problem with get json');
+        console.log('The retrieved data is empty');
       }
 
     } catch (e) {
