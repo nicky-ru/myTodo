@@ -65,6 +65,8 @@ const TodoComponent = (props) => {
         </List>
       )}
 
+      <i>{props.taskMessage}</i>
+
       <Divider />
       <Form onSubmit={props.handleAddItem} id='item-add-form'>
         <Form.Field inline>
