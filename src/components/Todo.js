@@ -17,13 +17,16 @@ import Loading from './Loading';
 const TodoComponent = (props) => {
   return (
     <>
-      <Popup
-        content='Save the changes before leaving the current folder'
-        trigger={<Button onClick={props.handleMySkyWrite}>Save</Button>}
-      />
-      {props.saving === true && (<Loader active inline size={'small'} />)}
 
       <Header size='medium'>{props.filePath}:</Header>
+
+      {props.saving === true && (
+        <>
+          <i>Saving... </i>
+          <Loader active inline size={'small'} />
+        </>
+      )
+      }
 
       {props.loading === true && (
         <Dimmer active inverted>

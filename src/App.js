@@ -19,12 +19,13 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [needWrite, setNeedWrite] = useState(false);
 
   // list helpers
   const [todoItems, setTodoItems] = useState([]);
   const [item, setItem] = useState('');
   const [listNotEmpty, setListNotEmpty] = useState(false);
-  const [needWrite, setNeedWrite] = useState(false);
+
 
   // MySky Helpers
   const dirNames = useState(['today', 'important', 'groceries', 'reading_list'])[0];
