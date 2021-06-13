@@ -36,6 +36,7 @@ const HeaderComponent = (props) => {
             icon="user circle"
             iconPosition="left"
             fluid
+            disabled
           />
         </Container>
       </>
