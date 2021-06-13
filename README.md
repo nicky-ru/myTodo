@@ -14,7 +14,8 @@ While using this app, don't forget to save the changes each time before moving t
 2) Connect created myskylink to hns  
 
 Current Version:
-https://1000bbh8efqhuit8g5gggcfdfkk37fupgecm18n7gg9q3g1r26ot3s8.siasky.net/
+https://1007v9v9154galpvkhnvtblinj95kbl2ohm991nl463umsfrm1n1big.siasky.net/
 
 Previous Versions:
+https://1000bbh8efqhuit8g5gggcfdfkk37fupgecm18n7gg9q3g1r26ot3s8.siasky.net/
 https://100e5f5i69als19fnv0bq60uh549006sep4lda39p6ij7t217vc3ej8.siasky.net/
