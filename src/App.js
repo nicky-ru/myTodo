@@ -145,7 +145,7 @@ function App() {
       }
 
     } catch (e) {
-      console.log('error while getting JSON');
+      console.error('error while getting JSON');
     }
 
     setLoading(false);
