@@ -138,13 +138,18 @@ function App() {
       const { data } = await mySky.getJSON(filePath);
 
       if (data) {
-        setTodoItems(data.todoItems);
-        console.log('User data loaded from SkyDB!', data);
-      } else {
-        console.log('The retrieved data is empty');
-      }
 
-    } catch (e) {
+        if (data.todoItems.length > 0) {
+          setTodoItems(data.todoItems);
+          console.log('User data loaded from SkyDB!');
+
+        } else {
+          console.log('The retrieved data is empty');
+        }
+
+      } else console.log('The retrieved data is undefined');
+
+    } catch {
       console.error('error while getting JSON');
     }
 
