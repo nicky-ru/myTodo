@@ -32,6 +32,9 @@ function App() {
   const [mySky, setMySky] = useState();
   const [loggedIn, setLoggedIn] = useState(null);
 
+  // choose a data domain for saving files in MySky
+  const dataDomain = 'mytodo';
+
   // When list folder changes, update FilePath state.
   useEffect(() => {
     setFilePath(dataDomain + '/' + dirNames[activeTab]);
@@ -41,7 +44,9 @@ function App() {
   useEffect(() => {
     // clear the todoItems state when change to another folder
     setTodoItems([]);
-    loadData();
+    if (userID) {
+      loadData();
+    }
   }, [filePath]);
 
   // handle empty lists
@@ -49,8 +54,12 @@ function App() {
     setListNotEmpty(todoItems.length > 0);
   }, [todoItems]);
 
-  // choose a data domain for saving files in MySky
-  const dataDomain = 'mytodo';
+  // load data on user change
+  useEffect(() => {
+    if (userID) {
+      loadData();
+    }
+  }, [userID]);
 
   // On initial run, start initialization of MySky
   useEffect(() => {
