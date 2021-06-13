@@ -24,6 +24,7 @@ function App() {
   const [todoItems, setTodoItems] = useState([]);
   const [item, setItem] = useState('');
   const [listNotEmpty, setListNotEmpty] = useState(false);
+  const [needWrite, setNeedWrite] = useState(false);
 
   // MySky Helpers
   const dirNames = useState(['today', 'important', 'groceries', 'reading_list'])[0];
@@ -52,7 +53,11 @@ function App() {
   // handle empty lists
   useEffect(() => {
     setListNotEmpty(todoItems.length > 0);
-  }, [todoItems]);
+
+    if (needWrite) {
+      handleMySkyWrite().then(() => {setNeedWrite(false)});
+    }
+  }, [todoItems, needWrite]);
 
   // On initial run, start initialization of MySky
   useEffect(() => {
@@ -85,6 +90,7 @@ function App() {
     const items = [...todoItems];
     items.push(item);
     setTodoItems(items);
+    setNeedWrite(true);
     setItem('');
   }
 
@@ -96,6 +102,7 @@ function App() {
     const items = [...todoItems];
     items.splice(i, 1);
     setTodoItems(items);
+    setNeedWrite(true);
   }
 
   const handleMySkyLogin = async () => {

@@ -25,11 +25,6 @@ const TodoComponent = (props) => {
 
       <Header size='medium'>{props.filePath}:</Header>
 
-      {/*{props.loading === true && (*/}
-      {/*  <Dimmer active inverted>*/}
-      {/*    <Loader inverted content='Loading' />*/}
-      {/*  </Dimmer>*/}
-      {/*)}*/}
       {props.loading === true && (
         <Dimmer active inverted>
           <Loading />
