@@ -44,22 +44,15 @@ function App() {
   useEffect(() => {
     // clear the todoItems state when change to another folder
     setTodoItems([]);
-    if (userID) {
+    if (mySky) {
       loadData();
     }
-  }, [filePath]);
+  }, [filePath, mySky]);
 
   // handle empty lists
   useEffect(() => {
     setListNotEmpty(todoItems.length > 0);
   }, [todoItems]);
-
-  // load data on user change
-  useEffect(() => {
-    if (userID) {
-      loadData();
-    }
-  }, [userID]);
 
   // On initial run, start initialization of MySky
   useEffect(() => {
