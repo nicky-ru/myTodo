@@ -69,7 +69,7 @@ const TodoComponent = (props) => {
       <Form onSubmit={props.handleAddItem} id='item-add-form'>
         <Form.Field inline>
           <Input
-            type='text' placeholder='e.g. Feed my cat'
+            type='text' placeholder='e.g. Feed my cat' value={props.item}
             onChange={(e) => {
               props.setItem(e.target.value);
             }}

@@ -9,10 +9,10 @@ import TodoComponent from './components/Todo';
 
 import { SkynetClient } from 'skynet-js';
 
-// const portal =
-//   window.location.hostname === 'localhost' ? 'https://siasky.net' : undefined;
-// const client = new SkynetClient(portal);
-const client = new SkynetClient();
+const portal =
+  window.location.hostname === 'localhost' ? 'https://siasky.net' : undefined;
+const client = new SkynetClient(portal);
+// const client = new SkynetClient();
 
 function App() {
   // Define app state helpers
@@ -68,7 +68,6 @@ function App() {
 
   const handleAddItem = async (event) => {
     event.preventDefault();
-    document.getElementById('item-add-form').reset();
     console.log(`item to add: ${item}`);
 
     // new items will be temporary saved in the todoItems state
@@ -76,6 +75,7 @@ function App() {
     const items = [...todoItems];
     items.push(item);
     setTodoItems(items);
+    setItem('');
   }
 
   const handleDeleteItem = async (i) => {
@@ -162,6 +162,7 @@ function App() {
     todoItems,
     handleAddItem,
     handleDeleteItem,
+    item,
     setItem,
     loadData,
     handleMySkyWrite,
