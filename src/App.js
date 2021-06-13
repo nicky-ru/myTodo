@@ -26,7 +26,7 @@ function App() {
   const [listNotEmpty, setListNotEmpty] = useState(false);
 
   // MySky Helpers
-  const [dirNames, setDirNames] = useState(['today', 'important', 'groceries', 'reading_list']);
+  const dirNames = useState(['today', 'important', 'groceries', 'reading_list'])[0];
   const [filePath, setFilePath] = useState();
   const [userID, setUserID] = useState('');
   const [mySky, setMySky] = useState();
