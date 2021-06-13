@@ -83,7 +83,7 @@ function App() {
     initMySky();
   }, []);
 
-  const handleAddItem = async (event) => {
+  const handleAddItem = (event) => {
     event.preventDefault();
     console.log(`item to add: ${item}`);
 
@@ -95,7 +95,7 @@ function App() {
     setItem('');
   }
 
-  const handleDeleteItem = async (i) => {
+  const handleDeleteItem = (i) => {
     console.log(`item to delete: ${todoItems[i]}`);
 
     // the item will be removed from the todoItems list in the current state
