@@ -71,7 +71,10 @@ const TodoComponent = (props) => {
           <Input
             type='text' placeholder='e.g. Feed my cat' value={props.item}
             onChange={(e) => {
-              props.setItem(e.target.value);
+              // size validation
+              if (e.target.value.length < 50) {
+                props.setItem(e.target.value);
+              }
             }}
           />
           <Popup
