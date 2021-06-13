@@ -32,6 +32,7 @@ const HeaderComponent = (props) => {
           <Input
             placeholder="You must Login with MySky..."
             value={props.userID}
+            loading={props.loggedIn === null}
             icon="user circle"
             iconPosition="left"
             fluid
