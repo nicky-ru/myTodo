@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 
 import Items from './Items';
+import Loading from './Loading';
 
 const TodoComponent = (props) => {
   return (
@@ -24,12 +25,16 @@ const TodoComponent = (props) => {
 
       <Header size='medium'>{props.filePath}:</Header>
 
+      {/*{props.loading === true && (*/}
+      {/*  <Dimmer active inverted>*/}
+      {/*    <Loader inverted content='Loading' />*/}
+      {/*  </Dimmer>*/}
+      {/*)}*/}
       {props.loading === true && (
         <Dimmer active inverted>
-          <Loader inverted content='Loading' />
+          <Loading />
         </Dimmer>
       )}
-
       {props.loggedIn === true && (
         <List>
           <Items
