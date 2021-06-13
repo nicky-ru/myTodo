@@ -10,8 +10,6 @@ import {
   Header,
   Dimmer,
   Loader,
-  Image,
-  Segment
 } from 'semantic-ui-react'
 
 const TodoComponent = (props) => {
@@ -40,11 +38,6 @@ const TodoComponent = (props) => {
 
   return (
     <>
-      <Popup
-        content='Load list on login'
-        trigger={<Button onClick={props.loadData}>Load</Button>}
-      />
-
       <Popup
         content='Save the changes before leaving the current folder'
         trigger={<Button onClick={props.handleMySkyWrite}>Save</Button>}
