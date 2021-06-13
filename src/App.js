@@ -8,6 +8,7 @@ import HeaderComponent from './components/Header';
 import TodoComponent from './components/Todo';
 
 import { SkynetClient } from 'skynet-js';
+import DoneFolder from './components/DoneFolder';
 
 const portal =
   window.location.hostname === 'localhost' ? 'https://siasky.net' : undefined;
@@ -217,10 +218,10 @@ function App() {
       ),
     },
     {
-      menuItem: 'Reading List',
+      menuItem: 'Done',
       render: () => (
         <Tab.Pane>
-          <TodoComponent {...formProps}/>
+          <DoneFolder/>
         </Tab.Pane>
       ),
     },
