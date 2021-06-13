@@ -38,6 +38,8 @@ function App() {
 
   // Load items for a new filePath
   useEffect(() => {
+    // clear the todoItems state when change to another folder
+    setTodoItems([]);
     loadData();
   }, [filePath]);
 
@@ -152,9 +154,6 @@ function App() {
   // handleSelectTab handles selecting the folder of the mytodo app
   const handleSelectTab = (e, { activeIndex }) => {
     setActiveTab(activeIndex);
-
-    // clear the todoItems state when change to another folder
-    setTodoItems([]);
   };
 
   // define args passed to the TodoComponent
